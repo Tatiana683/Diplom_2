@@ -1,0 +1,8 @@
+.idea
+.build
+.target
+__pycache__/
+tests/__pycache__/
+pages/__pycache__/
+locators/__pycache__/
+.pytest_cahe
