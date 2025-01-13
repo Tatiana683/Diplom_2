@@ -11,8 +11,8 @@ class TestCreateUser:
         password = RandomCred.generate_password()
         name = RandomCred.generate_name()
         user_data = UserMethods.create_user(login, password, name)
-        assert 200 == user_data[0]
-        assert True == user_data[1]['success']
+        assert user_data[0] == 200
+        assert user_data[1]['success'] == True
         token = UserMethods.get_user_token(login, password)
         UserMethods.delete_user(login, password, token)
 
@@ -21,8 +21,8 @@ class TestCreateUser:
         password = "password"
         name = "Username"
         user_data = UserMethods.create_user(login, password, name)
-        assert 403 == user_data[0]
-        assert "User already exists" == user_data[1]['message']
+        assert user_data[0] == 403
+        assert  user_data[1]['message'] == "User already exists"
 
     @pytest.mark.parametrize(
         'login, password, name',
@@ -34,7 +34,7 @@ class TestCreateUser:
     )
     def test_creating_user_without_required_field(self, login, password, name):
         user_data = UserMethods.create_user(login, password, name)
-        assert "Email, password and name are required fields" == user_data[1]['message']
+        assert user_data[1]['message'] == Constants.ERROR_INCORRECT_DATA_CREATE_USER
 
 class TestAuthorizationUser:
 
@@ -42,8 +42,8 @@ class TestAuthorizationUser:
         login = Constants.LOGIN_USER_1
         password = Constants.PASSWORD_USER_1
         user_data = UserMethods.login_user(login, password)
-        assert 200 == user_data[0]
-        assert True == user_data[1]['success']
+        assert user_data[0] == 200
+        assert user_data[1]['success'] == True
 
     @pytest.mark.parametrize(
         'login, password',
@@ -54,7 +54,7 @@ class TestAuthorizationUser:
     )
     def test_login_user_with_incorrect_data(self, login, password):
         user_data = UserMethods.login_user(login, password)
-        assert user_data == (401, {"success": False, "message": "email or password are incorrect"})
+        assert user_data == (401, Constants.ERROR_INCORRECT_DATA_LOGIN)
 
 class TestChangeDataUser:
     @pytest.mark.parametrize(
@@ -71,8 +71,8 @@ class TestChangeDataUser:
         name = Constants.NAME_USER_2
         token = UserMethods.get_user_token(login, password)
         change_data = UserMethods.change_users_data(new_email, new_password, new_name, token)
-        assert 200 == change_data[0]
-        assert True == change_data[1]['success']
+        assert change_data[0] == 200
+        assert change_data[1]['success'] == True
 
         UserMethods.change_users_data(login, password, name, token)
 
@@ -86,4 +86,4 @@ class TestChangeDataUser:
     )
     def test_change_user_data_without_authorization(self, new_email, new_password, new_name):
         change_data = UserMethods.change_users_data(new_email, new_password, new_name, token='')
-        assert change_data == (401, {"success": False, "message": "You should be authorised"})
+        assert change_data == (401, Constants.ERROR_AUTHORIZATION)

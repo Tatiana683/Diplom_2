@@ -18,4 +18,6 @@ class Constants:
     FLUORESCENT_BUN = '61c0c5a71d1f82001bdaaa6d'
     INCORRECT_BUN = '61c0c5a71d1f82001bdaaa6r'
 
-
+    ERROR_INCORRECT_DATA_CREATE_USER = "Email, password and name are required fields"
+    ERROR_INCORRECT_DATA_LOGIN = {"success": False, "message": "email or password are incorrect"}
+    ERROR_AUTHORIZATION = {"success": False, "message": "You should be authorised"}
